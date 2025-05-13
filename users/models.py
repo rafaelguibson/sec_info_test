@@ -1,10 +1,18 @@
 from django.db import models
 import uuid
 import hashlib
+import pyautogui
 import os
 
+def get_pointer_location():
+    try:
+        x, y = pyautogui.position()
+        return x * y
+    except:
+        return os.urandom(16).hex()  # fallback caso falhe
+
 def generate_salt():
-    return os.urandom(16).hex()
+    return os.urandom(16).hex() + str(get_pointer_location())
 
 # Adicionar captura da posição do mouse para o sal
 def hash_with_salt(data, salt):
